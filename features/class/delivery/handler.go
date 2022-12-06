@@ -21,7 +21,7 @@ func NewClass(service class.ServiceInterface, e *echo.Echo) {
 
 	e.POST("/classes", handler.AddUser, middlewares.JWTMiddleware())
 	e.GET("/classes", handler.GetAllClass, middlewares.JWTMiddleware())
-	e.GET("/classes/", handler.GetClassbyName, middlewares.JWTMiddleware())
+	e.GET("/class", handler.GetClassbyName, middlewares.JWTMiddleware())
 	e.PUT("/classes/:id", handler.UpdateClass, middlewares.JWTMiddleware())
 	e.DELETE("/classes/:id", handler.DeleteClass, middlewares.JWTMiddleware())
 
