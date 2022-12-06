@@ -18,11 +18,8 @@ func main() {
 	e := echo.New()
 
 	factory.InitFactory(e, db)
-
-	e.Logger.Fatal(e.Start(fmt.Sprintf(":%d", cfg.SERVER_PORT)))
-
-	factory.InitFactory(e, db)
 	e.Pre(middleware.RemoveTrailingSlash())
 	e.Use(middleware.CORS())
+	e.Logger.Fatal(e.Start(fmt.Sprintf(":%d", cfg.SERVER_PORT)))
 
 }
