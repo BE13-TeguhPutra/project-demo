@@ -15,7 +15,7 @@ servers:
 tags:
   - name: Auth
     description: "authentication"
-  - name: Users
+  - name: user
     description: "Manajemen data user"
   - name: Mentee
     description: "Manajemen data Mantee"
@@ -40,7 +40,7 @@ paths:
               type: object
               example:
                 email: "teguh@mail.com"
-                password: "123456"
+                password: "teguh"
       responses:
         '201':
           description: Login berhasil.
@@ -59,10 +59,10 @@ paths:
         '404' :
           $ref: '#/components/responses/404'
 
-  /users:
+  /user:
     post:
       tags:
-        - Users
+        - user
       summary: add user
       description: Menambah data User (register)
       security:
@@ -74,13 +74,11 @@ paths:
             schema:
               type: object
               example:
-                full_name: "budi prakoso"
+                fullname: "budi prakoso"
                 email: "budi@mail.com"
-                team: "be"
                 password: "qwerty"
-                phone_number: "0822349"
+                phone: "0822349"
                 address: "surabaya"
-                status: "active"
                 role: "admin"
       responses:
         '201':
@@ -106,20 +104,20 @@ paths:
     
     get:
       tags:
-        - Users
-      summary: get all users
+        - user
+      summary: get all user
       description: Melihat seluruh data user
 
       responses:
         '200':
-          description: A list of users
+          description: A list of user
           content:
             application/json:
               schema:
                 type: object
                 example:
                   status: "success"
-                  message: "success get all users"
+                  message: "success get all user"
                   data:
                     - id: 1
                       name: "budi"
@@ -131,11 +129,11 @@ paths:
                       address: "surabaya"
         '404':
           $ref: '#/components/responses/404'
-  /users/:
+  /user/:
     get:
       tags:
-        - Users
-      summary: get users by name
+        - user
+      summary: get user by name
       description: Mencari User dengan nama
       parameters:
         - name: name
@@ -148,14 +146,14 @@ paths:
 
       responses:
         '200':
-          description: A list of users
+          description: A list of user
           content:
             application/json:
               schema:
                 type: object
                 example:
                   status: "success"
-                  message: "success get all users"
+                  message: "success get all user"
                   data:
                     id: 1
                     name: "budi"
@@ -164,11 +162,11 @@ paths:
                     
         '404':
           $ref: '#/components/responses/404'
-  /users/{id_user}:
+  /user/{id_user}:
     put:
       tags:
-        - Users
-      summary: update users
+        - user
+      summary: update user
       description: Mengubah data User
       security:
         - JWTAuth: []
@@ -197,14 +195,14 @@ paths:
                 role: "admin"
       responses:
         '200':
-          description: A list of users
+          description: A list of user
           content:
             application/json:
               schema:
                 type: object
                 example:
                   status: "success"
-                  message: "success Update users"
+                  message: "success Update user"
                   data: 
                     full_name: "budi prakoso"
                     email: "budi@mail.com"
@@ -218,8 +216,8 @@ paths:
           $ref: '#/components/responses/404'
     delete:
       tags:
-        - Users
-      summary: Delete Users
+        - user
+      summary: Delete user
       description: menghapus akun user
       security:
         - JWTAuth: []
@@ -315,7 +313,7 @@ paths:
 
       responses:
         '200':
-          description: A list of users
+          description: A list of user
           content:
             application/json:
               schema:
@@ -399,7 +397,7 @@ paths:
 
       responses:
         '200':
-          description: A list of users
+          description: A list of user
           content:
             application/json:
               schema:
@@ -458,7 +456,7 @@ paths:
                 
       responses:
         '200':
-          description: A list of users
+          description: A list of user
           content:
             application/json:
               schema:
@@ -537,7 +535,7 @@ paths:
                 type: object
                 example:
                   status: "success"
-                  message: "success get all users"
+                  message: "success get all user"
                   data:
                     id: 1
                     name: "sari"
@@ -745,7 +743,7 @@ paths:
 
       responses:
         '200':
-          description: A list of users
+          description: A list of user
           content:
             application/json:
               schema:
@@ -787,7 +785,7 @@ paths:
 
       responses:
         '200':
-          description: A list of users
+          description: A list of user
           content:
             application/json:
               schema:
