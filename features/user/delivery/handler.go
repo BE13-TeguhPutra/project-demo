@@ -4,6 +4,8 @@ package delivery
 import (
 	"be13/project/features/user"
 	"be13/project/helper"
+	"be13/project/middlewares"
+	"log"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -18,7 +20,7 @@ func New(Service user.ServiceEntities, e *echo.Echo) {
 		UserService: Service,
 	}
 	// e.GET("/user", handler.GetAll) // memanggil func getall
-	e.POST("/user", handler.Create)
+	e.POST("/user", handler.Create, middlewares.JWTMiddleware())
 	// e.POST("/auth", handler.Login)
 	// e.PUT("/user/:id", handler.Update)
 	// e.GET("/user/:id", handler.GetById)
@@ -26,11 +28,11 @@ func New(Service user.ServiceEntities, e *echo.Echo) {
 }
 func (delivery *UserDeliv) Create(c echo.Context) error {
 
-	// roletoken := middlewares.ExtractTokenUserRole(c)
-	// log.Println("Role Token", roletoken)
-	// if roletoken != "admin" {
-	// 	return c.JSON(http.StatusUnauthorized, helper.PesanGagalHelper("tidak bisa diakses khusus admin!!!"))
-	// }
+	roletoken := middlewares.ExtractTokenUserRole(c)
+	log.Println("Role Token", roletoken)
+	if roletoken != "admin" {
+		return c.JSON(http.StatusUnauthorized, helper.PesanGagalHelper("tidak bisa diakses khusus admin!!!"))
+	}
 
 	Inputuser := UserRequest{} //penangkapan data user reques dari entities user
 	errbind := c.Bind(&Inputuser)
