@@ -29,19 +29,21 @@ func (delivery *AuthDelivery) login(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error binding data "+errBind.Error()))
 	}
 
-	token, hashed, err := delivery.authServices.Login(authInput.Email, authInput.Password)
+	token, dataUser, err := delivery.authServices.Login(authInput.Email, authInput.Password)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, helper.FailedResponse("failed login"))
 	}
 
 	z := []byte(authInput.Password)
-	errPass := bcrypt.CompareHashAndPassword([]byte(hashed), z)
+	errPass := bcrypt.CompareHashAndPassword([]byte(dataUser.Password), z)
 	if errPass != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Incorrect Password "+errPass.Error()))
 	}
 
 	data := map[string]any{
 		"token": token,
+		"name":  dataUser.FullName,
+		"role":  dataUser.Role,
 	}
 	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("success login", data))
 

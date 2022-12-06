@@ -20,21 +20,21 @@ func NewAuth(db *gorm.DB) auth.RepositoryInterface {
 }
 
 // Login implements auth.RepositoryInterface
-func (repo *authRepository) Login(email string, pass string) (string, string, error) {
+func (repo *authRepository) Login(email string, pass string) (string, repository.User, error) {
 	var userData repository.User
 	tx := repo.db.Where("email = ?", email).First(&userData)
 	if tx.Error != nil {
-		return "", "", tx.Error
+		return "", repository.User{}, tx.Error
 	}
 
 	if tx.RowsAffected == 0 {
-		return "", "", errors.New("login failed")
+		return "", repository.User{}, errors.New("login failed")
 	}
 
 	token, errToken := middlewares.CreateToken(int(userData.ID), userData.Role)
 	if errToken != nil {
-		return "", "", errToken
+		return "", repository.User{}, errToken
 	}
 
-	return token, userData.Password, nil
+	return token, userData, nil
 }
