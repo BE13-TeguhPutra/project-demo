@@ -44,7 +44,6 @@ func (delivery *AuthDelivery) login(c echo.Context) error {
 		"user_id": "asdad",
 		"token":   token,
 		"name":    dataUser.FullName,
-		"role":    dataUser.Role,
 	}
 	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("success login", data))
 
