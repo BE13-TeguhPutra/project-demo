@@ -41,8 +41,9 @@ func (delivery *AuthDelivery) login(c echo.Context) error {
 	}
 
 	data := map[string]any{
-		"user_id": dataUser.ID,
+
 		"token":   token,
+		"user_id": dataUser.ID,
 		"name":    dataUser.FullName,
 		"role":    dataUser.Role,
 	}
