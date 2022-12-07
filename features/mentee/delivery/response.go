@@ -23,7 +23,7 @@ type MenteeResponse struct {
 	Major             string `json:"major"`
 	Graduate          string `json:"graduate"`
 	ClassID           uint   `json:"class_id"`
-	Feedbacks         []delivery.FeedbackResponse
+	// Feedbacks         []delivery.FeedbackResponse
 }
 
 func coreToResponse(core mentee.Core) MenteeResponse {
@@ -44,7 +44,7 @@ func coreToResponse(core mentee.Core) MenteeResponse {
 		Major:             core.Major,
 		Graduate:          core.Graduate,
 		ClassID:           core.ClassID,
-		Feedbacks:         LoadFeedsCoretoResponse(core.Feedbacks),
+		// Feedbacks:         LoadFeedsCoretoResponse(core.Feedbacks),
 	}
 	return response
 

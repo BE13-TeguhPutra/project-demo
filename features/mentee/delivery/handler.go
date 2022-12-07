@@ -135,7 +135,7 @@ func (delivery *MenteeDelivery) GetMenteeFeedback(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Id not Found"))
 	}
 
-	result := coreToResponse(userId)
-	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success Get mentee", result))
+	// result := coreToResponse(userId)
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success Get mentee", userId))
 
 }
