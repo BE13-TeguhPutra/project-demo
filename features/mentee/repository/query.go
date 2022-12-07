@@ -21,7 +21,7 @@ func NewMentee(db *gorm.DB) mentee.RepositoryInterface {
 func (repo *menteeRepository) GetMenteeFeedback(id uint) (mentee.Core, error) {
 	mentees := Mentee{}
 
-	tx := repo.db.First(&mentees, id)
+	tx := repo.db.Preload("Feedbacks").First(&mentees, id)
 	if tx.Error != nil {
 		return mentee.Core{}, tx.Error
 	}
