@@ -2,7 +2,6 @@ package repository
 
 import (
 	"be13/project/features/class/repository"
-	"be13/project/features/user"
 	_user "be13/project/features/user"
 
 	"gorm.io/gorm"
@@ -18,6 +17,7 @@ type User struct {
 	Status   string
 	Role     string
 	Classes  []repository.Class
+	// Feedbacks []_feedback.Feedback
 }
 
 func FromUserCore(dataCore _user.CoreUser) User { //fungsi yang mengambil data dari entities usercore dan merubah data ke user gorm(model.go)
@@ -32,15 +32,22 @@ func FromUserCore(dataCore _user.CoreUser) User { //fungsi yang mengambil data d
 	} ///formating data berdasarkan data gorm dan kita mapping data yang kita butuhkan untuk inputan  klien
 	return userGorm //insert user
 }
+func (dataModel *User) ModelsToCore() _user.CoreUser { //fungsi yang mengambil data dari  user gorm(model.go)  dan merubah data ke entities usercore
+	return _user.CoreUser{
 
-func (data User) toCore() user.CoreUser {
-	return user.CoreUser{
-
-		FullName:  data.FullName,
-		Email:     data.Email,
-		Password:  data.Password,
-		Role:      data.Role,
-		CreatedAt: data.CreatedAt,
-		UpdatedAt: data.UpdatedAt,
+		FullName: dataModel.FullName,
+		Email:    dataModel.Email, //mapping data core ke data gorm model
+		Password: dataModel.Password,
+		Phone:    dataModel.Phone,
+		Address:  dataModel.Address,
+		Status:   dataModel.Status,
+		Role:     dataModel.Role,
 	}
+}
+func ListModelTOCore(dataModel []User) []_user.CoreUser { //fungsi yang mengambil data dari  user gorm(model.go)  dan merubah data ke entities usercore
+	var dataCore []_user.CoreUser
+	for _, value := range dataModel {
+		dataCore = append(dataCore, value.ModelsToCore())
+	}
+	return dataCore //  untuk menampilkan data ke controller
 }

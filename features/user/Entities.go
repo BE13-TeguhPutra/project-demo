@@ -8,30 +8,30 @@ import (
 
 type CoreUser struct {
 	ID        uint
-	FullName  string
+	FullName  string `validate:"required"`
 	Password  string `validate:"required"`
 	Email     string `validate:"required,email"`
-	Phone     string
-	Address   string
-	Role      string
-	Status    string
+	Phone     string `validate:"required"`
+	Address   string `validate:"required"`
+	Role      string `validate:"required"`
+	Status    string `validate:"required"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
 
 type ServiceEntities interface { //sebagai contract yang dibuat di layer service
-	// GetAll() (data []CoreUser, err error) //yang returnnya(mengembalikan data core)
-	Create(input CoreUser) (err error) // menambahkah data user berdasarkan data usercore
-	// Login(input CoreUser) (token string, err error)
+	GetAll() (data []CoreUser, err error) //yang returnnya(mengembalikan data core)
+	Create(input CoreUser) (err error)    // menambahkah data user berdasarkan data usercore
+
 	// Update(id int, input CoreUser) error
 	// GetById(id int) (data CoreUser, err error)
 	// DeleteById(id int) error
 }
 
 type RepositoryEntities interface { // berkaitan database
-	// GetAll() (data []CoreUser, err error)
+	GetAll() (data []CoreUser, err error)
 	Create(input CoreUser) (row int, err error)
-	// FindUser(email string) (result CoreUser, err error)
+
 	// Update(id int, input CoreUser) error
 	// GetById(id int) (data CoreUser, err error)
 	// DeleteById(id int) error

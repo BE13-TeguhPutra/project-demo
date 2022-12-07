@@ -11,6 +11,8 @@ type userRepository struct {
 	db *gorm.DB
 }
 
+// GetAll implements user.RepositoryEntities
+
 // FindUser implements user.RepositoryEntities
 
 // FindUser implements user.RepositoryEntities
@@ -36,20 +38,17 @@ func (repo *userRepository) Create(input user.CoreUser) (row int, err error) {
 	}
 	return int(tx.RowsAffected), nil
 }
-func (repo *userRepository) FindUser(email string) (result user.CoreUser, err error) {
-	var userData User
-	tx := repo.db.Where("email = ?", email).First(&userData)
+func (repo *userRepository) GetAll() (data []user.CoreUser, err error) {
+	var users []User //mengambil data gorm model(model.go)
+	tx := repo.db.Unscoped().Find(&users)
 	if tx.Error != nil {
-		return user.CoreUser{}, tx.Error
+		return nil, tx.Error
 	}
 
-	if tx.RowsAffected == 0 {
-		return user.CoreUser{}, errors.New("login failed")
-	}
+	var DataCore = ListModelTOCore(users) //mengambil data dari gorm model(file repository(model.go))
 
-	result = userData.toCore()
+	return DataCore, nil
 
-	return result, nil
 }
 
 // DeleteById implements user.RepositoryEntities

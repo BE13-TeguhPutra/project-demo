@@ -20,7 +20,8 @@ func New(Service user.ServiceEntities, e *echo.Echo) {
 		UserService: Service,
 	}
 	// e.GET("/user", handler.GetAll) // memanggil func getall
-	e.POST("/user", handler.Create, middlewares.JWTMiddleware())
+	e.POST("/user", handler.Create)
+	e.GET("/user", handler.GetAll, middlewares.JWTMiddleware())
 	// e.POST("/auth", handler.Login)
 	// e.PUT("/user/:id", handler.Update)
 	// e.GET("/user/:id", handler.GetById)
@@ -50,32 +51,18 @@ func (delivery *UserDeliv) Create(c echo.Context) error {
 	}
 	return c.JSON(http.StatusCreated, helper.PesanSuksesHelper("berhasil create user"))
 }
+func (delivery *UserDeliv) GetAll(c echo.Context) error {
+	roletoken := middlewares.ExtractTokenUserRole(c)
+	log.Println("Role Token", roletoken)
+	if roletoken != "admin" {
+		return c.JSON(http.StatusUnauthorized, helper.PesanGagalHelper("tidak bisa diakses khusus admin!!!"))
+	}
+	result, err := delivery.UserService.GetAll() //memanggil fungsi service yang ada di folder service
 
-// func (handler *UserDeliv) Login(c echo.Context) error {
-// 	userInput := AuthRequest{}
-// 	errBind := c.Bind(&userInput)
-// 	if errBind != nil {
-// 		// return c.JSON(http.StatusInternalServerError, map[string]interface{}{
-// 		// 	"message": "failed to get bind data",
-// 		// })
-// 		return c.JSON(http.StatusBadRequest, helper.PesanGagalHelper("erorr read data"))
-// 	}
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, helper.PesanGagalHelper("erorr read data"))
+	}
+	var ResponData = ListUserCoreToUserRespon(result)
+	return c.JSON(http.StatusOK, helper.PesanDataBerhasilHelper("berhasil membaca  user", ResponData))
 
-// 	dataCore := ToCore(userInput)
-// 	token, err := handler.UserService.Login(dataCore)
-
-// 	if err != nil {
-// 		// return c.JSON(http.StatusInternalServerError, map[string]interface{}{
-// 		// 	"message": "failed to get token data" + err.Error(),
-// 		// })
-// 		return c.JSON(http.StatusInternalServerError, helper.PesanGagalHelper("Failed to Login. "+err.Error()))
-// 	}
-// return c.JSON(http.StatusOK, map[string]interface{}{
-// 	"message": "success",
-// 	"name":    name,
-// 	"token":   result,
-// })
-// 	return c.JSON(http.StatusOK, helper.PesanDataBerhasilHelper("login success", map[string]interface{}{
-// 		"token": token,
-// 	}))
-// }
+}
