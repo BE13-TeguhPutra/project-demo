@@ -20,7 +20,7 @@ func NewClass(service class.ServiceInterface, e *echo.Echo) {
 
 	e.POST("/classes", handler.AddClass)
 	e.GET("/classes", handler.GetAllClass)
-	e.GET("/classes/", handler.GetClassbyName)
+	e.GET("/class", handler.GetClassbyName)
 	e.PUT("/classes/:id", handler.UpdateClass)
 	e.DELETE("/classes/:id", handler.DeleteClass)
 
