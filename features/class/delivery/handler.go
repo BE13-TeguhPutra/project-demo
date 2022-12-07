@@ -20,7 +20,7 @@ func NewClass(service class.ServiceInterface, e *echo.Echo) {
 
 	e.POST("/classes", handler.AddClass)
 	e.GET("/classes", handler.GetAllClass)
-	e.GET("/class", handler.GetClassbyName)
+	e.GET("/classes/:id", handler.GetClassbyName)
 	e.PUT("/classes/:id", handler.UpdateClass)
 	e.DELETE("/classes/:id", handler.DeleteClass)
 
@@ -61,14 +61,14 @@ func (delivery *ClassDelivery) GetAllClass(c echo.Context) error {
 }
 
 func (delivery *ClassDelivery) GetClassbyName(c echo.Context) error {
-	// idParam := c.Param("id")
-	// id, errconv := strconv.Atoi(idParam)
-	// if errconv != nil {
-	// 	return c.JSON(http.StatusBadRequest, helper.FailedResponse("error Convert"))
-	// }
-	name := c.QueryParam("name")
+	idParam := c.Param("id")
+	id, errconv := strconv.Atoi(idParam)
+	if errconv != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("error Convert"))
+	}
+	// name := c.QueryParam("name")
 
-	userId, err := delivery.classServices.GetClassbyId(name)
+	userId, err := delivery.classServices.GetClassbyId(uint(id))
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Id not Found"))
 	}

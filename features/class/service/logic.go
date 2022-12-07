@@ -41,8 +41,8 @@ func (service *classService) GetAllClass() (data []class.Core, err error) {
 }
 
 // GetClassbyId implements class.ServiceInterface
-func (service *classService) GetClassbyId(name string) (class.Core, error) {
-	data, errData := service.classRepository.GetClassbyId(name)
+func (service *classService) GetClassbyId(id uint) (class.Core, error) {
+	data, errData := service.classRepository.GetClassbyId(id)
 	if errData != nil {
 		return class.Core{}, errors.New("error get id")
 	}

@@ -62,9 +62,9 @@ func (repo *classRepository) GetAllClass() (data []class.Core, err error) {
 }
 
 // GetClassbyId implements class.RepositoryInterface
-func (repo *classRepository) GetClassbyId(name string) (class.Core, error) {
+func (repo *classRepository) GetClassbyId(id uint) (class.Core, error) {
 	classes := Class{}
-	tx := repo.db.Where("class_name", name).Find(&classes)
+	tx := repo.db.First(&classes, id)
 	if tx.Error != nil {
 		return class.Core{}, tx.Error
 	}
