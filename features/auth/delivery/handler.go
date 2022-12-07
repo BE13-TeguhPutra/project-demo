@@ -41,9 +41,10 @@ func (delivery *AuthDelivery) login(c echo.Context) error {
 	}
 
 	data := map[string]any{
-		"user_id": "asdad",
+		"user_id": dataUser.ID,
 		"token":   token,
 		"name":    dataUser.FullName,
+		"role":    dataUser.Role,
 	}
 	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("success login", data))
 
