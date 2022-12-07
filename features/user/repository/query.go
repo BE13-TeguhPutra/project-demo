@@ -55,9 +55,9 @@ func (repo *userRepository) Update(id int, input user.CoreUser) error {
 	userGorm := FromUserCore(input)
 
 	if userGorm.UpdatedAt != (time.Time{}) {
-		userGorm.Status = "Active"
-	} else {
 		userGorm.Status = "Not-Active"
+	} else {
+		userGorm.Status = "Active"
 	}
 	tx := repo.db.Model(&userGorm).Where("id = ?", id).Updates(&userGorm)
 

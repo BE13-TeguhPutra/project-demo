@@ -5,7 +5,6 @@ import (
 	"be13/project/features/user"
 	"be13/project/helper"
 	"be13/project/middlewares"
-	"log"
 	"net/http"
 	"strconv"
 
@@ -23,7 +22,7 @@ func New(Service user.ServiceEntities, e *echo.Echo) {
 	// e.GET("/user", handler.GetAll) // memanggil func getall
 	e.POST("/user", handler.Create)
 	e.GET("/user", handler.GetAll, middlewares.JWTMiddleware())
-	e.PUT("/user/:id", handler.Update, middlewares.JWTMiddleware())
+	e.PUT("/user/:id", handler.Update)
 	// e.POST("/auth", handler.Login)
 	// e.PUT("/user/:id", handler.Update)
 	// e.GET("/user/:id", handler.GetById)
@@ -66,11 +65,11 @@ func (delivery *UserDeliv) GetAll(c echo.Context) error {
 }
 func (delivery *UserDeliv) Update(c echo.Context) error {
 
-	roletoken := middlewares.ExtractTokenUserRole(c)
-	log.Println("Role Token", roletoken)
-	if roletoken != "admin" {
-		return c.JSON(http.StatusUnauthorized, helper.PesanGagalHelper("tidak bisa diakses khusus admin!!!"))
-	}
+	// roletoken := middlewares.ExtractTokenUserRole(c)
+	// log.Println("Role Token", roletoken)
+	// if roletoken != "admin" {
+	// 	return c.JSON(http.StatusUnauthorized, helper.PesanGagalHelper("tidak bisa diakses khusus admin!!!"))
+	// }
 	id, _ := strconv.Atoi(c.Param("id"))
 
 	userInput := UserRequest{}
