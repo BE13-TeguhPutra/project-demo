@@ -35,7 +35,7 @@ func (repo *userRepository) Create(input user.CoreUser) (row int, err error) {
 		return -1, tx.Error
 	}
 	if tx.RowsAffected == 0 {
-		return 0, errors.New("Insert failed")
+		return 0, errors.New("insert failed")
 	}
 	return int(tx.RowsAffected), nil
 }

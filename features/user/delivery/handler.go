@@ -41,7 +41,7 @@ func (delivery *UserDeliv) Create(c echo.Context) error {
 	errbind := c.Bind(&Inputuser)
 
 	generatePass := user.Bcript(Inputuser.Password)
-	Inputuser.Password = string(generatePass)
+	Inputuser.Password = generatePass
 
 	if errbind != nil {
 		return c.JSON(http.StatusBadRequest, helper.PesanGagalHelper("erorr read data"+errbind.Error()))
