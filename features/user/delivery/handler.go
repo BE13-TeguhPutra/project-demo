@@ -52,11 +52,11 @@ func (delivery *UserDeliv) Create(c echo.Context) error {
 	return c.JSON(http.StatusCreated, helper.PesanSuksesHelper("berhasil create user"))
 }
 func (delivery *UserDeliv) GetAll(c echo.Context) error {
-	roletoken := middlewares.ExtractTokenUserRole(c)
-	log.Println("Role Token", roletoken)
-	if roletoken != "admin" {
-		return c.JSON(http.StatusUnauthorized, helper.PesanGagalHelper("tidak bisa diakses khusus admin!!!"))
-	}
+	// roletoken := middlewares.ExtractTokenUserRole(c)
+	// log.Println("Role Token", roletoken)
+	// if roletoken != "admin" {
+	// 	return c.JSON(http.StatusUnauthorized, helper.PesanGagalHelper("tidak bisa diakses khusus admin!!!"))
+	// }
 	result, err := delivery.UserService.GetAll() //memanggil fungsi service yang ada di folder service
 
 	if err != nil {
