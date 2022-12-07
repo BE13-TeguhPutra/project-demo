@@ -2,7 +2,6 @@ package delivery
 
 import (
 	"be13/project/features/class"
-	"be13/project/middlewares"
 	"be13/project/utils/helper"
 	"net/http"
 	"strconv"
@@ -19,15 +18,15 @@ func NewClass(service class.ServiceInterface, e *echo.Echo) {
 		classServices: service,
 	}
 
-	e.POST("/classes", handler.AddUser, middlewares.JWTMiddleware())
-	e.GET("/classes", handler.GetAllClass, middlewares.JWTMiddleware())
-	e.GET("/class", handler.GetClassbyName, middlewares.JWTMiddleware())
-	e.PUT("/classes/:id", handler.UpdateClass, middlewares.JWTMiddleware())
-	e.DELETE("/classes/:id", handler.DeleteClass, middlewares.JWTMiddleware())
+	e.POST("/classes", handler.AddClass)
+	e.GET("/classes", handler.GetAllClass)
+	e.GET("/classes/", handler.GetClassbyName)
+	e.PUT("/classes/:id", handler.UpdateClass)
+	e.DELETE("/classes/:id", handler.DeleteClass)
 
 }
 
-func (delivery *ClassDelivery) AddUser(c echo.Context) error {
+func (delivery *ClassDelivery) AddClass(c echo.Context) error {
 	// role := middlewares.ExtractTokenUserRole(c)
 	// // fmt.Println(role)
 	// // if role != "super admin" {
@@ -111,6 +110,7 @@ func (delivery *ClassDelivery) DeleteClass(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("error Delete"))
 	}
+
 	result := coreToResponse(data)
 
 	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success Delete Class", result))

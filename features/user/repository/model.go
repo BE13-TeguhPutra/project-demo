@@ -2,6 +2,7 @@ package repository
 
 import (
 	"be13/project/features/class/repository"
+	_feedback "be13/project/features/feedback/repository"
 	_user "be13/project/features/user"
 
 	"gorm.io/gorm"
@@ -9,15 +10,15 @@ import (
 
 type User struct {
 	gorm.Model
-	FullName string `gorm:"type:varchar(50)"`
-	Password string `gorm:"type:varchar(500)"`
-	Email    string
-	Phone    string
-	Address  string
-	Status   string
-	Role     string
-	Classes  []repository.Class
-	// Feedbacks []_feedback.Feedback
+	FullName  string `gorm:"type:varchar(50)"`
+	Password  string `gorm:"type:varchar(500)"`
+	Email     string
+	Phone     string
+	Address   string
+	Status    string
+	Role      string
+	Classes   []repository.Class
+	Feedbacks []_feedback.Feedback
 }
 
 func FromUserCore(dataCore _user.CoreUser) User { //fungsi yang mengambil data dari entities usercore dan merubah data ke user gorm(model.go)

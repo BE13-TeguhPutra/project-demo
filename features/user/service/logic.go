@@ -2,6 +2,7 @@ package service
 
 import (
 	"be13/project/features/user"
+
 	"errors"
 
 	"github.com/go-playground/validator/v10"
@@ -27,11 +28,11 @@ func New(repo user.RepositoryEntities) user.ServiceEntities { //dengan kembalian
 // Create implements user.ServiceEntities
 func (service *UserService) Create(input user.CoreUser) (err error) {
 	input.Status = "Active"
-	input.Role = "Mentor"
+	// input.Role = "Mentor"
 	if validateERR := service.validate.Struct(input); validateERR != nil {
 		return validateERR
 	}
-
+	input.Password = user.Bcript(input.Password)
 	_, errCreate := service.userRepository.Create(input)
 	if errCreate != nil {
 		return errors.New("GAGAL MENAMBAH DATA , QUERY ERROR")
@@ -42,61 +43,27 @@ func (service *UserService) Create(input user.CoreUser) (err error) {
 
 // GetAll implements user.ServiceEntities
 func (service *UserService) GetAll() (data []user.CoreUser, err error) {
+
 	data, err = service.userRepository.GetAll() // memanggil struct entities repository yang ada di entities yang berisi coding logic
 	return
 }
 
-// func (service *UserService) Login(input user.CoreUser) (token string, err error) {
-// 	if errValidate := service.validate.Struct(input); errValidate != nil {
-// 		log.Error(errValidate.Error())
-// 		return "", errors.New("Failed to Login. Error validate input. Please check your input.")
-// 	}
+// Update implements user.ServiceEntities
+func (service *UserService) Update(id int, input user.CoreUser) error {
+	errUpdate := service.userRepository.Update(id, input)
+	if errUpdate != nil {
+		return errors.New("GAGAL mengupdate data , QUERY ERROR")
+	}
 
-// 	result, errLogin := service.userRepository.FindUser(input.Email)
-// 	if errLogin != nil {
-// 		log.Error(errLogin.Error())
-// 		if strings.Contains(errLogin.Error(), "table") {
-// 			return "", errors.New("Failed to Login. Error on request. Please contact your administrator.")
-// 		} else if strings.Contains(errLogin.Error(), "found") {
-// 			return "", errors.New("Failed to Login. Email not found. Please check password again.")
-// 		} else {
-// 			return "", errors.New("Failed to Login. Other Error. Please contact your administrator.")
-// 		}
-// 	}
-
-// 	errCheckPass := bcrypt.CompareHashAndPassword([]byte(result.Password), []byte(input.Password))
-// 	// fmt.Println("Data Core = ", dataCore, "\n\n\n")
-// 	// fmt.Println("Result = ", result, "\n\n\n")
-// 	if errCheckPass != nil {
-// 		log.Error(errCheckPass.Error())
-// 		return "", errors.New("Failed to Login. Password didn't match. Please check password again.")
-// 	}
-
-// 	token, errToken := middlewares.CreateToken(int(result.ID), result.Role)
-// 	if errToken != nil {
-// 		log.Error(errToken.Error())
-// 		return "", errors.New("Failed to login. Error on generate token. Please check password again.")
-// 	}
-
-// 	return token, nil
-// }
+	return nil
+}
 
 // DeleteById implements user.ServiceEntities
 // func (*UserService) DeleteById(id int) error {
 // 	panic("unimplemented")
 // }
 
-// // GetAll implements user.ServiceEntities
-// func (*UserService) GetAll() (data []user.CoreUser, err error) {
-// 	panic("unimplemented")
-// }
-
 // // GetById implements user.ServiceEntities
 // func (*UserService) GetById(id int) (data user.CoreUser, err error) {
-// 	panic("unimplemented")
-// }
-
-// // Update implements user.ServiceEntities
-// func (*UserService) Update(id int, input user.CoreUser) error {
 // 	panic("unimplemented")
 // }

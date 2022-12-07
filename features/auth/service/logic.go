@@ -1,9 +1,6 @@
 package service
 
-import (
-	"be13/project/features/auth"
-	"be13/project/features/user/repository"
-)
+import "be13/project/features/auth"
 
 type authService struct {
 	authRepository auth.RepositoryInterface
@@ -17,7 +14,7 @@ func NewAuth(repo auth.RepositoryInterface) auth.ServiceInterface {
 	}
 }
 
-func (service *authService) Login(email string, pass string) (string, repository.User, error) {
-	token, data, err := service.authRepository.Login(email, pass)
-	return token, data, err
+func (service *authService) Login(email string, pass string) (string, string, error) {
+	token, pass, err := service.authRepository.Login(email, pass)
+	return token, pass, err
 }

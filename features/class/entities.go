@@ -6,6 +6,7 @@ type Core struct {
 	ID        uint
 	ClassName string `validate:"required"`
 	UserID    uint   `validate:"required"`
+
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }

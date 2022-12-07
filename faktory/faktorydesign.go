@@ -7,8 +7,11 @@ import (
 	deliveryClass "be13/project/features/class/delivery"
 	repoClass "be13/project/features/class/repository"
 	serviceClass "be13/project/features/class/service"
+	deliveryMentee "be13/project/features/mentee/delivery"
+	repoMentee "be13/project/features/mentee/repository"
+	serviceMentee "be13/project/features/mentee/service"
 	userDelivery "be13/project/features/user/delivery"
-	userRepo "be13/project/features/user/repository" //alias
+	userRepo "be13/project/features/user/repository"
 	userService "be13/project/features/user/service"
 
 	"github.com/labstack/echo/v4"
@@ -27,5 +30,13 @@ func InitFactory(e *echo.Echo, db *gorm.DB) {
 	authRepoFactory := repoAuth.NewAuth(db)
 	authServiceFactory := serviceAuth.NewAuth(authRepoFactory)
 	deliveryAuth.NewAuth(authServiceFactory, e)
+
+	menteeRepoFactory := repoMentee.NewMentee(db)
+	menteeServiceFactory := serviceMentee.NewMentee(menteeRepoFactory)
+	deliveryMentee.NewMentee(menteeServiceFactory, e)
+
+	// feedbackRepoFactory := repoFeedback.NewFeedback(db)
+	// feedbackServiceFactory := serviceFeedback.NewFeedback(feedbackRepoFactory)
+	// deliveryFeedback.NewFeedback(feedbackServiceFactory, e)
 
 }

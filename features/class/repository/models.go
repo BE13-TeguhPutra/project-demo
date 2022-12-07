@@ -2,6 +2,7 @@ package repository
 
 import (
 	"be13/project/features/class"
+	"be13/project/features/mentee/repository"
 
 	"gorm.io/gorm"
 )
@@ -10,6 +11,7 @@ type Class struct {
 	gorm.Model
 	ClassName string
 	UserID    uint
+	Mentees   []repository.Mentee
 }
 
 func CoretoModel(dataCore class.Core) Class {

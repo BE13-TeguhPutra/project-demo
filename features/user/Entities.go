@@ -23,7 +23,7 @@ type ServiceEntities interface { //sebagai contract yang dibuat di layer service
 	GetAll() (data []CoreUser, err error) //yang returnnya(mengembalikan data core)
 	Create(input CoreUser) (err error)    // menambahkah data user berdasarkan data usercore
 
-	// Update(id int, input CoreUser) error
+	Update(id int, input CoreUser) error
 	// GetById(id int) (data CoreUser, err error)
 	// DeleteById(id int) error
 }
@@ -32,7 +32,7 @@ type RepositoryEntities interface { // berkaitan database
 	GetAll() (data []CoreUser, err error)
 	Create(input CoreUser) (row int, err error)
 
-	// Update(id int, input CoreUser) error
+	Update(id int, input CoreUser) error
 	// GetById(id int) (data CoreUser, err error)
 	// DeleteById(id int) error
 }

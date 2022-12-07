@@ -1,6 +1,8 @@
 package delivery
 
-import "be13/project/features/user"
+import (
+	"be13/project/features/user"
+)
 
 type UserRequest struct {
 	FullName string `json:"fullname" form:"fullname"`
