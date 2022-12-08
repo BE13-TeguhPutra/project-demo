@@ -72,16 +72,6 @@ func (repo *userRepository) Update(id int, input user.CoreUser) error {
 // DeleteById implements user.RepositoryEntities
 func (repo *userRepository) DeleteById(id int) (user.CoreUser, error) {
 
-	// userGorm :=
-
-	// userGorm.Status = "Deactivated"
-	// tx := repo.db.Model(&userGorm).Where("id = ?", id).Updates(&userGorm)
-
-	// if tx.Error != nil {
-	// 	return user.CoreUser{}, tx.Error
-	// }
-	//////////////////////////////////////////////////////////////////////////////////////////
-	//////////////////////////////////////////////////////////////////////////////////////////
 	users := User{}
 	users.Status = "Deactivated"
 	tx := repo.db.Model(&users).Where("id = ?", id).Updates(&users)
@@ -108,6 +98,15 @@ func (repo *userRepository) DeleteById(id int) (user.CoreUser, error) {
 }
 
 // // GetById implements user.RepositoryEntities
-// func (*userRepository) GetById(id int) (data user.CoreUser, err error) {
-// 	panic("unimplemented")
-// }
+func (repo *userRepository) GetById(id int) (data user.CoreUser, err error) {
+	var users User
+
+	tx := repo.db.First(&users, id)
+
+	if tx.Error != nil {
+
+		return user.CoreUser{}, tx.Error
+	}
+	gorms := users.ModelsToCore()
+	return gorms, nil
+}

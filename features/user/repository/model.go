@@ -35,7 +35,7 @@ func FromUserCore(dataCore _user.CoreUser) User { //fungsi yang mengambil data d
 }
 func (dataModel *User) ModelsToCore() _user.CoreUser { //fungsi yang mengambil data dari  user gorm(model.go)  dan merubah data ke entities usercore
 	return _user.CoreUser{
-
+		ID:       dataModel.ID,
 		FullName: dataModel.FullName,
 		Email:    dataModel.Email, //mapping data core ke data gorm model
 		Password: dataModel.Password,

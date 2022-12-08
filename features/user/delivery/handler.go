@@ -25,6 +25,7 @@ func New(Service user.ServiceEntities, e *echo.Echo) {
 	e.GET("/user", handler.GetAll, middlewares.JWTMiddleware())
 	e.PUT("/user/:id", handler.Update, middlewares.JWTMiddleware())
 	e.DELETE("/user/:id", handler.DeleteById, middlewares.JWTMiddleware())
+	e.GET("/user/:id", handler.GetById, middlewares.JWTMiddleware())
 
 }
 func (delivery *UserDeliv) Create(c echo.Context) error {
@@ -102,4 +103,15 @@ func (delivery *UserDeliv) DeleteById(c echo.Context) error {
 	}
 	result := UserCoreToUserRespon(del)
 	return c.JSON(http.StatusOK, helper.PesanDataBerhasilHelper("berhasil menghapus user", result))
+}
+
+func (delivery *UserDeliv) GetById(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	result, err := delivery.UserService.GetById(id) //memanggil fungsi service yang ada di folder service//jika return nya 2 maka variable harus ada 2
+
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, helper.PesanGagalHelper("erorr read data"))
+	}
+	var ResponData = UserCoreToUserRespon(result)
+	return c.JSON(http.StatusOK, helper.PesanDataBerhasilHelper("berhasil membaca  user", ResponData))
 }

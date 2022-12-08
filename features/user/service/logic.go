@@ -66,6 +66,7 @@ func (service *UserService) DeleteById(id int) (user.CoreUser, error) {
 }
 
 // // GetById implements user.ServiceEntities
-// func (*UserService) GetById(id int) (data user.CoreUser, err error) {
-// 	panic("unimplemented")
-// }
+func (service *UserService) GetById(id int) (data user.CoreUser, err error) {
+	data, err = service.userRepository.GetById(id) // memanggil struct entities repository yang ada di entities yang berisi coding logic
+	return
+}
