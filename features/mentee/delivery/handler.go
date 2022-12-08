@@ -4,7 +4,6 @@ import (
 	"be13/project/features/mentee"
 	"be13/project/middlewares"
 	"be13/project/utils/helper"
-	"log"
 	"net/http"
 	"strconv"
 
@@ -104,11 +103,11 @@ func (delivery *MenteeDelivery) UpdateMentee(c echo.Context) error {
 
 }
 func (delivery *MenteeDelivery) DeleteMentee(c echo.Context) error {
-	roletoken := middlewares.ExtractTokenUserRole(c)
-	log.Println("Role Token", roletoken)
-	if roletoken != "admin" {
-		return c.JSON(http.StatusUnauthorized, helper.FailedResponse("tidak bisa diakses khusus admin!!!"))
-	}
+	// roletoken := middlewares.ExtractTokenUserRole(c)
+	// log.Println("Role Token", roletoken)
+	// if roletoken != "admin" {
+	// 	return c.JSON(http.StatusUnauthorized, helper.FailedResponse("tidak bisa diakses khusus admin!!!"))
+	// }
 
 	idParam := c.Param("id")
 	id, errconv := strconv.Atoi(idParam)

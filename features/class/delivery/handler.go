@@ -4,7 +4,6 @@ import (
 	"be13/project/features/class"
 	"be13/project/middlewares"
 	"be13/project/utils/helper"
-	"log"
 	"net/http"
 	"strconv"
 
@@ -29,11 +28,11 @@ func NewClass(service class.ServiceInterface, e *echo.Echo) {
 }
 
 func (delivery *ClassDelivery) AddClass(c echo.Context) error {
-	roletoken := middlewares.ExtractTokenUserRole(c)
-	log.Println("Role Token", roletoken)
-	if roletoken != "admin" {
-		return c.JSON(http.StatusUnauthorized, helper.FailedResponse("tidak bisa diakses khusus admin!!!"))
-	}
+	// roletoken := middlewares.ExtractTokenUserRole(c)
+	// log.Println("Role Token", roletoken)
+	// if roletoken != "admin" {
+	// 	return c.JSON(http.StatusUnauthorized, helper.FailedResponse("tidak bisa diakses khusus admin!!!"))
+	// }
 	class := ClassRequest{}
 	errBind := c.Bind(&class)
 	if errBind != nil {
@@ -80,11 +79,11 @@ func (delivery *ClassDelivery) GetClassbyName(c echo.Context) error {
 }
 
 func (delivery *ClassDelivery) UpdateClass(c echo.Context) error {
-	roletoken := middlewares.ExtractTokenUserRole(c)
-	log.Println("Role Token", roletoken)
-	if roletoken != "admin" {
-		return c.JSON(http.StatusUnauthorized, helper.FailedResponse("tidak bisa diakses khusus admin!!!"))
-	}
+	// roletoken := middlewares.ExtractTokenUserRole(c)
+	// log.Println("Role Token", roletoken)
+	// if roletoken != "admin" {
+	// 	return c.JSON(http.StatusUnauthorized, helper.FailedResponse("tidak bisa diakses khusus admin!!!"))
+	// }
 	class := ClassRequest{}
 	idParam := c.Param("id")
 	id, errconv := strconv.Atoi(idParam)
@@ -107,11 +106,11 @@ func (delivery *ClassDelivery) UpdateClass(c echo.Context) error {
 }
 
 func (delivery *ClassDelivery) DeleteClass(c echo.Context) error {
-	roletoken := middlewares.ExtractTokenUserRole(c)
-	log.Println("Role Token", roletoken)
-	if roletoken != "admin" {
-		return c.JSON(http.StatusUnauthorized, helper.FailedResponse("tidak bisa diakses khusus admin!!!"))
-	}
+	// roletoken := middlewares.ExtractTokenUserRole(c)
+	// log.Println("Role Token", roletoken)
+	// if roletoken != "admin" {
+	// 	return c.JSON(http.StatusUnauthorized, helper.FailedResponse("tidak bisa diakses khusus admin!!!"))
+	// }
 	idParam := c.Param("id")
 	id, errconv := strconv.Atoi(idParam)
 	if errconv != nil {
