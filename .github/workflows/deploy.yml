@@ -20,7 +20,8 @@ jobs:
           script: |
             cd /home/putrategu/project-demo
             git pull origin main
-            docker stop projectContainer
-            docker rm projectContainer
+            docker stop project-api 
+            docker rm project-api 
+            docker rmi project-images:latest
             docker build -t project-images:latest .
-            docker run -d -p 80:8080 -e SERVER_PORT=${{ secrets.SERVER_PORT }} -e DB_USERNAME=${{ secrets.DB_USERNAME }} -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} -e DB_HOST=${{ secrets.DB_HOST }} -e DB_PORT=${{ secrets.DB_PORT }} -e DB_NAME=${{ secrets.DB_NAME }} --name=projectContainer project-images:latest
+            docker run -d -p 80:8080 -e SERVER_PORT=${{ secrets.SERVER_PORT }} -e DB_USERNAME=${{ secrets.DB_USERNAME }} -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} -e DB_HOST=${{ secrets.DB_HOST }} -e DB_PORT=${{ secrets.DB_PORT }} -e DB_NAME=${{ secrets.DB_NAME }} --name project-api project-images:latest
