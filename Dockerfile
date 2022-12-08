@@ -1,4 +1,4 @@
-FROM golang:1.19
+FROM golang:1.19.3-alpine as build
 
 # membuat direktori app
 RUN mkdir /app
@@ -10,6 +10,6 @@ COPY ./ /app
 
 RUN go mod tidy
 
-RUN go build -o project_be-demo
+RUN go build -o project-api
 
-CMD ["./project_be-demo"]
+CMD ["./project-api"]

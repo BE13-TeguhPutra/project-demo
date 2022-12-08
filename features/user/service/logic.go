@@ -28,7 +28,7 @@ func New(repo user.RepositoryEntities) user.ServiceEntities { //dengan kembalian
 // Create implements user.ServiceEntities
 func (service *UserService) Create(input user.CoreUser) (err error) {
 	input.Status = "Active"
-	// input.Role = "Mentor"
+	input.Role = "Mentor"
 	if validateERR := service.validate.Struct(input); validateERR != nil {
 		return validateERR
 	}
@@ -60,9 +60,10 @@ func (service *UserService) Update(id int, input user.CoreUser) error {
 }
 
 // DeleteById implements user.ServiceEntities
-// func (*UserService) DeleteById(id int) error {
-// 	panic("unimplemented")
-// }
+func (service *UserService) DeleteById(id int) (user.CoreUser, error) {
+	data, err := service.userRepository.DeleteById(id) // memanggil struct entities repository yang ada di entities yang berisi coding logic
+	return data, err
+}
 
 // // GetById implements user.ServiceEntities
 // func (*UserService) GetById(id int) (data user.CoreUser, err error) {

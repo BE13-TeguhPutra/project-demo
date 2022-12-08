@@ -2,6 +2,7 @@ package repository
 
 import (
 	"be13/project/features/feedback"
+	_feedback "be13/project/features/feedback"
 
 	"gorm.io/gorm"
 )
@@ -45,4 +46,14 @@ func toCoreList(models []Feedback) []feedback.Core {
 
 	}
 	return feedCore
+}
+
+func FromUserCore(dataCore _feedback.Core) Feedback { //fungsi yang mengambil data dari entities usercore dan merubah data ke user gorm(model.go)
+	userGorm := Feedback{
+		UserID:   dataCore.UserID,
+		Status:   dataCore.Status,
+		MenteeID: dataCore.MenteeID,
+		Comment:  dataCore.Comment,
+	} ///formating data berdasarkan data gorm dan kita mapping data yang kita butuhkan untuk inputan  klien
+	return userGorm //insert user
 }

@@ -25,7 +25,8 @@ type ServiceEntities interface { //sebagai contract yang dibuat di layer service
 
 	Update(id int, input CoreUser) error
 	// GetById(id int) (data CoreUser, err error)
-	// DeleteById(id int) error
+	// GetById(id int) (data CoreUser, err error)
+	DeleteById(id int) (CoreUser, error)
 }
 
 type RepositoryEntities interface { // berkaitan database
@@ -34,7 +35,7 @@ type RepositoryEntities interface { // berkaitan database
 
 	Update(id int, input CoreUser) error
 	// GetById(id int) (data CoreUser, err error)
-	// DeleteById(id int) error
+	DeleteById(id int) (CoreUser, error)
 }
 
 func Bcript(y string) string {

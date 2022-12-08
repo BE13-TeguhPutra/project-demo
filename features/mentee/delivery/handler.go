@@ -2,7 +2,9 @@ package delivery
 
 import (
 	"be13/project/features/mentee"
+	"be13/project/middlewares"
 	"be13/project/utils/helper"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -18,12 +20,12 @@ func NewMentee(service mentee.ServiceInterface, e *echo.Echo) {
 		menteeServices: service,
 	}
 
-	e.POST("/mentees", handler.AddMentee)
-	e.GET("/mentees", handler.GetAllmentee)
-	e.GET("/mentee", handler.GetMentebyParam)
-	e.GET("/mentee/:id/feedback", handler.GetMenteeFeedback)
-	e.PUT("/mentees/:id", handler.UpdateMentee)
-	e.DELETE("/mentees/:id", handler.DeleteMentee)
+	e.POST("/mentees", handler.AddMentee, middlewares.JWTMiddleware())
+	e.GET("/mentees", handler.GetAllmentee, middlewares.JWTMiddleware())
+	e.GET("/mentee", handler.GetMentebyParam, middlewares.JWTMiddleware())
+	e.GET("/mentee/:id/feedback", handler.GetMenteeFeedback, middlewares.JWTMiddleware())
+	e.PUT("/mentees/:id", handler.UpdateMentee, middlewares.JWTMiddleware())
+	e.DELETE("/mentees/:id", handler.DeleteMentee, middlewares.JWTMiddleware())
 
 }
 
@@ -32,7 +34,7 @@ func (delivery *MenteeDelivery) GetAllmentee(c echo.Context) error {
 	// name := c.QueryParam("name")
 	result, err := delivery.menteeServices.GetAllmentee()
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Data Users is empty"))
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Data mentee is empty"))
 	}
 	data := responseList(result)
 
@@ -54,7 +56,7 @@ func (delivery *MenteeDelivery) GetMentebyParam(c echo.Context) error {
 
 	userId, err := delivery.menteeServices.GetMentebyParam(name)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Id not Found"))
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("mentee name not Found"))
 	}
 
 	result := responseList(userId)
@@ -74,7 +76,7 @@ func (delivery *MenteeDelivery) AddMentee(c echo.Context) error {
 
 	err := delivery.menteeServices.AddMentee(result)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, helper.FailedResponse("error insert into database"))
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("error insert into database"+err.Error()))
 	}
 	return c.JSON(http.StatusOK, helper.SuccessResponse("Success Add Mantee"))
 
@@ -96,12 +98,18 @@ func (delivery *MenteeDelivery) UpdateMentee(c echo.Context) error {
 	result := mentee.reqToCore()
 	err := delivery.menteeServices.UpdateMentee(id, result)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, helper.FailedResponse("error Update"))
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Update Failed"))
 	}
 	return c.JSON(http.StatusOK, helper.SuccessResponse("Success Update"))
 
 }
 func (delivery *MenteeDelivery) DeleteMentee(c echo.Context) error {
+	roletoken := middlewares.ExtractTokenUserRole(c)
+	log.Println("Role Token", roletoken)
+	if roletoken != "admin" {
+		return c.JSON(http.StatusUnauthorized, helper.FailedResponse("tidak bisa diakses khusus admin!!!"))
+	}
+
 	idParam := c.Param("id")
 	id, errconv := strconv.Atoi(idParam)
 	if errconv != nil {

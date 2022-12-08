@@ -11,13 +11,22 @@ type FeedbackRequest struct {
 	Comment  string `json:"comment" form:"comment"`
 }
 
-func (req *FeedbackRequest) reqToCore() feedback.Core {
-	return feedback.Core{
-		// ClassName: req.ClassName,
-		UserID:   req.UserID,
-		Status:   req.Status,
-		MenteeID: req.MenteeID,
-		Comment:  req.Comment,
-	}
+// func (req *FeedbackRequest) reqToCore() feedback.Core {
+// 	return feedback.Core{
+// 		// ClassName: req.ClassName,
+// 		UserID:   req.UserID,
+// 		Status:   req.Status,
+// 		MenteeID: req.MenteeID,
+// 		Comment:  req.Comment,
+// 	}
 
+// }
+
+func FeedbackRequestToUserCore(data FeedbackRequest) feedback.Core {
+	return feedback.Core{
+		UserID:   data.UserID,
+		Status:   data.Status,
+		MenteeID: data.MenteeID,
+		Comment:  data.Comment,
+	}
 }

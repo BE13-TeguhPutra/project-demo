@@ -13,17 +13,17 @@ type Core struct {
 }
 
 type ServiceInterface interface {
-	// GetAllClass() (data []Core, err error)
+	GetAllFeeds() (data []Core, err error)
 	AddFeedback(input Core) error
-	// GetClassbyId(name string) (Core, error)
-	DeleteFeedback(id int) (Core, error)
+	GetFeedbyId(id int) (Core, error)
+	DeleteFeedback(id int) error
 	UpdateFeedback(id int, input Core) error
 }
 
 type RepositoryInterface interface {
-	// GetAllClass() (data []Core, err error)
+	GetAllFeeds() (data []Core, err error)
 	AddFeedback(input Core) error
-	// GetClassbyId(name string) (Core, error)
-	DeleteFeedback(id int) (Core, error)
+	GetFeedbyId(id int) (Core, error)
+	DeleteFeedback(id int) error
 	UpdateFeedback(id int, input Core) error
 }

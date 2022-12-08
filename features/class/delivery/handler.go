@@ -2,7 +2,9 @@ package delivery
 
 import (
 	"be13/project/features/class"
+	"be13/project/middlewares"
 	"be13/project/utils/helper"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -18,32 +20,31 @@ func NewClass(service class.ServiceInterface, e *echo.Echo) {
 		classServices: service,
 	}
 
-	e.POST("/classes", handler.AddClass)
-	e.GET("/classes", handler.GetAllClass)
-	e.GET("/classes/:id", handler.GetClassbyName)
-	e.PUT("/classes/:id", handler.UpdateClass)
-	e.DELETE("/classes/:id", handler.DeleteClass)
+	e.POST("/classes", handler.AddClass, middlewares.JWTMiddleware())
+	e.GET("/classes", handler.GetAllClass, middlewares.JWTMiddleware())
+	e.GET("/classes/:id", handler.GetClassbyName, middlewares.JWTMiddleware())
+	e.PUT("/classes/:id", handler.UpdateClass, middlewares.JWTMiddleware())
+	e.DELETE("/classes/:id", handler.DeleteClass, middlewares.JWTMiddleware())
 
 }
 
 func (delivery *ClassDelivery) AddClass(c echo.Context) error {
-	// role := middlewares.ExtractTokenUserRole(c)
-	// // fmt.Println(role)
-	// // if role != "super admin" {
-	// // 	return c.JSON(http.StatusUnauthorized, helper.FailedResponse("Failed role is not super admin"))
-
-	// // }
+	roletoken := middlewares.ExtractTokenUserRole(c)
+	log.Println("Role Token", roletoken)
+	if roletoken != "admin" {
+		return c.JSON(http.StatusUnauthorized, helper.FailedResponse("tidak bisa diakses khusus admin!!!"))
+	}
 	class := ClassRequest{}
 	errBind := c.Bind(&class)
 	if errBind != nil {
-		return c.JSON(http.StatusBadRequest, helper.FailedResponse("error binding"))
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("error binding"+errBind.Error()))
 	}
 
 	result := class.reqToCore()
 
 	err := delivery.classServices.AddClass(result)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, helper.FailedResponse("error insert into database"))
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("error insert into database"+err.Error()))
 	}
 	return c.JSON(http.StatusOK, helper.SuccessResponse("Success Add Class"))
 
@@ -52,7 +53,7 @@ func (delivery *ClassDelivery) AddClass(c echo.Context) error {
 func (delivery *ClassDelivery) GetAllClass(c echo.Context) error {
 	result, err := delivery.classServices.GetAllClass()
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Data Users is empty"))
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Data Users is empty"+err.Error()))
 	}
 	data := responseList(result)
 
@@ -64,51 +65,61 @@ func (delivery *ClassDelivery) GetClassbyName(c echo.Context) error {
 	idParam := c.Param("id")
 	id, errconv := strconv.Atoi(idParam)
 	if errconv != nil {
-		return c.JSON(http.StatusBadRequest, helper.FailedResponse("error Convert"))
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("error Convert"+errconv.Error()))
 	}
 	// name := c.QueryParam("name")
 
 	userId, err := delivery.classServices.GetClassbyId(uint(id))
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Id not Found"))
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Id not Found"+err.Error()))
 	}
 
 	result := coreToResponse(userId)
-	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success Get cLASS", result))
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success Get Class", result))
 
 }
 
 func (delivery *ClassDelivery) UpdateClass(c echo.Context) error {
+	roletoken := middlewares.ExtractTokenUserRole(c)
+	log.Println("Role Token", roletoken)
+	if roletoken != "admin" {
+		return c.JSON(http.StatusUnauthorized, helper.FailedResponse("tidak bisa diakses khusus admin!!!"))
+	}
 	class := ClassRequest{}
 	idParam := c.Param("id")
 	id, errconv := strconv.Atoi(idParam)
 	if errconv != nil {
-		return c.JSON(http.StatusBadRequest, helper.FailedResponse("error Convert"))
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("error Convert"+errconv.Error()))
 	}
 
 	errBind := c.Bind(&class)
 	if errBind != nil {
-		return c.JSON(http.StatusBadRequest, helper.FailedResponse("error binding"))
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("error binding"+errBind.Error()))
 	}
 
 	result := class.reqToCore()
 	err := delivery.classServices.UpdateClass(id, result)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, helper.FailedResponse("error Update"))
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("error Update"+err.Error()))
 	}
 	return c.JSON(http.StatusOK, helper.SuccessResponse("Success Update"))
 
 }
 
 func (delivery *ClassDelivery) DeleteClass(c echo.Context) error {
+	roletoken := middlewares.ExtractTokenUserRole(c)
+	log.Println("Role Token", roletoken)
+	if roletoken != "admin" {
+		return c.JSON(http.StatusUnauthorized, helper.FailedResponse("tidak bisa diakses khusus admin!!!"))
+	}
 	idParam := c.Param("id")
 	id, errconv := strconv.Atoi(idParam)
 	if errconv != nil {
-		return c.JSON(http.StatusBadRequest, helper.FailedResponse("error Convert"))
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("error Convert"+errconv.Error()))
 	}
 	data, err := delivery.classServices.DeleteClass(id)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, helper.FailedResponse("error Delete"))
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("error Delete"+err.Error()))
 	}
 
 	result := coreToResponse(data)

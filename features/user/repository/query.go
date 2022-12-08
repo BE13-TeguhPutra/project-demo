@@ -35,9 +35,10 @@ func (repo *userRepository) Create(input user.CoreUser) (row int, err error) {
 		return -1, tx.Error
 	}
 	if tx.RowsAffected == 0 {
-		return 0, errors.New("insert failed")
+		return 0, errors.New("Insert failed")
 	}
 	return int(tx.RowsAffected), nil
+
 }
 func (repo *userRepository) GetAll() (data []user.CoreUser, err error) {
 	var users []User //mengambil data gorm model(model.go)
@@ -69,13 +70,44 @@ func (repo *userRepository) Update(id int, input user.CoreUser) error {
 }
 
 // DeleteById implements user.RepositoryEntities
-// func (*userRepository) DeleteById(id int) error {
-// 	panic("unimplemented")
-// }
+func (repo *userRepository) DeleteById(id int) (user.CoreUser, error) {
+
+	// userGorm :=
+
+	// userGorm.Status = "Deactivated"
+	// tx := repo.db.Model(&userGorm).Where("id = ?", id).Updates(&userGorm)
+
+	// if tx.Error != nil {
+	// 	return user.CoreUser{}, tx.Error
+	// }
+	//////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////
+	users := User{}
+	users.Status = "Deactivated"
+	tx := repo.db.Model(&users).Where("id = ?", id).Updates(&users)
+
+	if tx.Error != nil {
+		return user.CoreUser{}, tx.Error
+	}
+
+	tx1 := repo.db.Delete(&users, id)
+	if tx1.Error != nil {
+		return user.CoreUser{}, tx.Error
+	}
+
+	txres := repo.db.Unscoped().Where("id=?", id).Find(&users)
+	if txres.Error != nil {
+		return user.CoreUser{}, txres.Error
+	}
+	if tx.RowsAffected == 0 {
+		return user.CoreUser{}, errors.New("id not found")
+
+	}
+	result := users.ModelsToCore()
+	return result, nil
+}
 
 // // GetById implements user.RepositoryEntities
 // func (*userRepository) GetById(id int) (data user.CoreUser, err error) {
 // 	panic("unimplemented")
 // }
-
-// Update implements user.RepositoryEntities
