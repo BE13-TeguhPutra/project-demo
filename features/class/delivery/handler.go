@@ -56,7 +56,7 @@ func (delivery *ClassDelivery) GetAllClass(c echo.Context) error {
 	}
 	data := responseList(result)
 
-	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success Get All Users", data))
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success Get All class", data))
 
 }
 
