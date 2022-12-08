@@ -3,7 +3,7 @@ package delivery
 import "be13/project/features/user"
 
 type UserRespon struct {
-	// ID    uint   `json:"id`
+	ID       uint   `json:"id"`
 	FullName string `json:"fullname"`
 	Email    string `json:"email"`
 	Phone    string `json:"phone"`
@@ -15,7 +15,7 @@ type UserRespon struct {
 
 func UserCoreToUserRespon(dataCore user.CoreUser) UserRespon { // data user core yang ada di controller yang memanggil user repository
 	return UserRespon{
-		// ID:    dataCore.ID,
+		ID:       dataCore.ID,
 		FullName: dataCore.FullName,
 		Email:    dataCore.Email, //mapping data core ke data gorm model
 		Phone:    dataCore.Phone,
