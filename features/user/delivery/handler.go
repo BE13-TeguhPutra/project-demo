@@ -21,8 +21,8 @@ func New(Service user.ServiceEntities, e *echo.Echo) {
 		UserService: Service,
 	}
 
-	e.POST("/user", handler.Create, middlewares.JWTMiddleware())
-	e.GET("/user", handler.GetAll, middlewares.JWTMiddleware())
+	e.POST("/user", handler.Create)
+	e.GET("/user", handler.GetAll)
 	e.PUT("/user/:id", handler.Update, middlewares.JWTMiddleware())
 	e.DELETE("/user/:id", handler.DeleteById, middlewares.JWTMiddleware())
 	e.GET("/user/:id", handler.GetById, middlewares.JWTMiddleware())
